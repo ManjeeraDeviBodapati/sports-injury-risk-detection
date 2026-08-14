@@ -1,27 +1,54 @@
 from fastapi import FastAPI
-from app.database import engine, Base
+from fastapi.middleware.cors import CORSMiddleware
 
-from app.models.user import User
-from app.models.athlete import Athlete
+from app.database import engine, Base
+from app.config import settings
+
+# Import all ORM models to ensure table creation
+import app.models
 
 from app.routes.auth import router as auth_router
 from app.routes.athlete import router as athlete_router
+from app.routes.datasets import router as datasets_router
+from app.routes.pose import router as pose_router
+from app.routes.biomechanics import router as biomechanics_router
+from app.routes.reports import router as reports_router
+from app.routes.risk import router as risk_router
 
-# Create database tables
+# Create database tables automatically
 Base.metadata.create_all(bind=engine)
 
 # Create FastAPI app
 app = FastAPI(
-    title="Sports Injury Risk Detection API",
-    version="1.0.0"
+    title=settings.PROJECT_NAME,
+    version=settings.VERSION,
+    description="AI-Powered Sports Injury Risk Detection Platform API (Milestones 1, 2 & 3 Core Engine)"
 )
 
-# Include routes
+# Configure CORS Middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # Allow all origins for dev/testing
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Include API Routers
 app.include_router(auth_router)
 app.include_router(athlete_router)
+app.include_router(datasets_router)
+app.include_router(pose_router)
+app.include_router(biomechanics_router)
+app.include_router(reports_router)
+app.include_router(risk_router)
 
 @app.get("/")
 def home():
     return {
-        "message": "Backend Running Successfully"
+        "status": "online",
+        "system": settings.PROJECT_NAME,
+        "version": settings.VERSION,
+        "milestones": ["Milestone 1 Completed", "Milestone 2 Operational", "Milestone 3 Functional"],
+        "documentation": "/docs"
     }

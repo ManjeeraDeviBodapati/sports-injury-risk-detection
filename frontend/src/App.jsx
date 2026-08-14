@@ -1,122 +1,146 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import React, { useState } from 'react';
+import Navbar from './components/Navbar';
+import AuthModal from './components/AuthModal';
+import AthleteManagement from './components/AthleteManagement';
+import AthleteDetailModal from './components/AthleteDetailModal';
+import RoleDashboard from './components/RoleDashboard';
+import DatasetsExplorer from './components/DatasetsExplorer';
+import ArchitectureViewer from './components/ArchitectureViewer';
+import PoseEstimationStudio from './components/PoseEstimationStudio';
+import BiomechanicsReportView from './components/BiomechanicsReportView';
+import AthleteIntelligenceDashboard from './components/AthleteIntelligenceDashboard';
+import TeamRiskOverview from './components/TeamRiskOverview';
+import './App.css';
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [activeTab, setActiveTab] = useState('intelligence'); // 'intelligence', 'team_heatmap', 'athletes', 'pose_studio', 'role_dashboard', 'datasets', 'architecture'
+  const [currentRole, setCurrentRole] = useState('Administrator');
+  const [user, setUser] = useState(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [selectedAthlete, setSelectedAthlete] = useState(null);
+  const [reportAnalysisId, setReportAnalysisId] = useState(null);
+  const [toastMessage, setToastMessage] = useState(null);
+
+  const showToast = (msg) => {
+    setToastMessage(msg);
+    setTimeout(() => {
+      setToastMessage(null);
+    }, 4000);
+  };
+
+  const handleLoginSuccess = (data) => {
+    setUser(data.user);
+    setCurrentRole(data.role);
+    localStorage.setItem('access_token', data.access_token);
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    localStorage.removeItem('access_token');
+    showToast('Logged out of system session.');
+  };
+
+  const handleRefreshAthlete = async () => {
+    if (!selectedAthlete) return;
+    try {
+      const res = await fetch(`http://127.0.0.1:8000/athletes/${selectedAthlete.id}`);
+      if (res.ok) {
+        const updated = await res.json();
+        setSelectedAthlete(updated);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="app-container">
+      <Navbar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        currentRole={currentRole}
+        setCurrentRole={setCurrentRole}
+        user={user}
+        onOpenAuth={() => setShowAuthModal(true)}
+        onLogout={handleLogout}
+      />
 
-      <div className="ticks"></div>
+      <main className="main-content">
+        {activeTab === 'intelligence' && (
+          <AthleteIntelligenceDashboard onShowToast={showToast} />
+        )}
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        {activeTab === 'team_heatmap' && (
+          <TeamRiskOverview
+            onShowToast={showToast}
+            onSelectAthlete={(ath) => {
+              setSelectedAthlete(ath);
+              setActiveTab('athletes');
+            }}
+          />
+        )}
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+        {activeTab === 'athletes' && (
+          <AthleteManagement
+            onSelectAthlete={(ath) => setSelectedAthlete(ath)}
+            onShowToast={showToast}
+          />
+        )}
+
+        {activeTab === 'pose_studio' && (
+          <PoseEstimationStudio
+            onShowToast={showToast}
+            onViewReport={(id) => setReportAnalysisId(id)}
+          />
+        )}
+
+        {activeTab === 'role_dashboard' && (
+          <RoleDashboard currentRole={currentRole} />
+        )}
+
+        {activeTab === 'datasets' && (
+          <DatasetsExplorer onShowToast={showToast} />
+        )}
+
+        {activeTab === 'architecture' && (
+          <ArchitectureViewer />
+        )}
+      </main>
+
+      {/* Auth Modal */}
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onLoginSuccess={handleLoginSuccess}
+        onShowToast={showToast}
+      />
+
+      {/* Athlete Detail Modal */}
+      {selectedAthlete && (
+        <AthleteDetailModal
+          athlete={selectedAthlete}
+          onClose={() => setSelectedAthlete(null)}
+          onRefresh={handleRefreshAthlete}
+          onShowToast={showToast}
+        />
+      )}
+
+      {/* Biomechanics Report View Modal */}
+      {reportAnalysisId && (
+        <BiomechanicsReportView
+          analysisId={reportAnalysisId}
+          onClose={() => setReportAnalysisId(null)}
+          onShowToast={showToast}
+        />
+      )}
+
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="toast-notice">
+          <span>⚡</span>
+          <div>{toastMessage}</div>
+        </div>
+      )}
+    </div>
+  );
 }
-
-export default App
