@@ -10,10 +10,11 @@ import PoseEstimationStudio from './components/PoseEstimationStudio';
 import BiomechanicsReportView from './components/BiomechanicsReportView';
 import AthleteIntelligenceDashboard from './components/AthleteIntelligenceDashboard';
 import TeamRiskOverview from './components/TeamRiskOverview';
+import ExecutiveAnalyticsDashboard from './components/ExecutiveAnalyticsDashboard';
 import './App.css';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('intelligence'); // 'intelligence', 'team_heatmap', 'athletes', 'pose_studio', 'role_dashboard', 'datasets', 'architecture'
+  const [activeTab, setActiveTab] = useState('intelligence'); // 'intelligence', 'team_heatmap', 'pose_studio', 'executive', 'athletes', 'role_dashboard', 'datasets', 'architecture'
   const [currentRole, setCurrentRole] = useState('Administrator');
   const [user, setUser] = useState(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -80,17 +81,21 @@ export default function App() {
           />
         )}
 
-        {activeTab === 'athletes' && (
-          <AthleteManagement
-            onSelectAthlete={(ath) => setSelectedAthlete(ath)}
-            onShowToast={showToast}
-          />
-        )}
-
         {activeTab === 'pose_studio' && (
           <PoseEstimationStudio
             onShowToast={showToast}
             onViewReport={(id) => setReportAnalysisId(id)}
+          />
+        )}
+
+        {activeTab === 'executive' && (
+          <ExecutiveAnalyticsDashboard onShowToast={showToast} />
+        )}
+
+        {activeTab === 'athletes' && (
+          <AthleteManagement
+            onSelectAthlete={(ath) => setSelectedAthlete(ath)}
+            onShowToast={showToast}
           />
         )}
 

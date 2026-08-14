@@ -24,18 +24,12 @@ export default function Navbar({
         <div>
           <h1 className="brand-title">Sports Injury Intelligence</h1>
           <span style={{ fontSize: '0.7rem', color: 'var(--primary)', letterSpacing: '0.05em' }}>
-            AI BIOMECHANICS & PREDICTIVE ANALYTICS (MILESTONES 1, 2 & 3)
+            PRODUCTION PLATFORM (MILESTONES 1 - 4 COMPLETE)
           </span>
         </div>
       </div>
 
       <nav className="nav-tabs">
-        <button
-          className={`nav-tab ${activeTab === 'athletes' ? 'active' : ''}`}
-          onClick={() => setActiveTab('athletes')}
-        >
-          Athletes
-        </button>
         <button
           className={`nav-tab ${activeTab === 'intelligence' ? 'active' : ''}`}
           onClick={() => setActiveTab('intelligence')}
@@ -55,16 +49,22 @@ export default function Navbar({
           Pose Studio
         </button>
         <button
+          className={`nav-tab ${activeTab === 'executive' ? 'active' : ''}`}
+          onClick={() => setActiveTab('executive')}
+        >
+          Executive Analytics
+        </button>
+        <button
+          className={`nav-tab ${activeTab === 'athletes' ? 'active' : ''}`}
+          onClick={() => setActiveTab('athletes')}
+        >
+          Athletes
+        </button>
+        <button
           className={`nav-tab ${activeTab === 'role_dashboard' ? 'active' : ''}`}
           onClick={() => setActiveTab('role_dashboard')}
         >
           Role Views
-        </button>
-        <button
-          className={`nav-tab ${activeTab === 'datasets' ? 'active' : ''}`}
-          onClick={() => setActiveTab('datasets')}
-        >
-          Datasets
         </button>
         <button
           className={`nav-tab ${activeTab === 'architecture' ? 'active' : ''}`}

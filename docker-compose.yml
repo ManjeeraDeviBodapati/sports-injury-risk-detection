@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  # Database Service (PostgreSQL)
+  postgres_db:
+    image: postgres:15-alpine
+    container_name: sports_injury_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: sports_password_2026
+      POSTGRES_DB: sports_injury_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # FastAPI Backend Engine
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: sports_injury_backend
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql://postgres:sports_password_2026@postgres_db:5432/sports_injury_db
+      - SECRET_KEY=sports_injury_risk_detection_production_secret_2026
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=1440
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres_db
+
+  # React Frontend Web Server
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: sports_injury_frontend
+    restart: always
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
