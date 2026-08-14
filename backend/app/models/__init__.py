@@ -4,7 +4,9 @@ from app.models.injury import InjuryHistory
 from app.models.assessment import PhysicalAssessment
 from app.models.dataset import DatasetReference
 from app.models.pose import PoseAnalysis
+from app.models.risk import InjuryRiskRecord, CorrectiveRecommendation
 
 __all__ = [
-    "User", "Athlete", "InjuryHistory", "PhysicalAssessment", "DatasetReference", "PoseAnalysis"
+    "User", "Athlete", "InjuryHistory", "PhysicalAssessment", 
+    "DatasetReference", "PoseAnalysis", "InjuryRiskRecord", "CorrectiveRecommendation"
 ]
