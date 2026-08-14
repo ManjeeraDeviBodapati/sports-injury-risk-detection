@@ -1,11 +1,17 @@
-from sqlalchemy import Column, Integer, String
+import datetime
+from sqlalchemy import Column, Integer, String, Boolean, DateTime
+from sqlalchemy.orm import relationship
 from app.database import Base
 
 class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    full_name = Column(String, nullable=False)
-    email = Column(String, unique=True, index=True)
-    password = Column(String, nullable=False)
-    role = Column(String, nullable=False)
+    full_name = Column(String(255), nullable=False)
+    email = Column(String(255), unique=True, index=True, nullable=False)
+    password = Column(String(255), nullable=False)
+    role = Column(String(50), nullable=False, default="Athlete") # Athlete, Coach, Physiotherapist, Sports Scientist, Administrator
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+
+    athlete_profile = relationship("Athlete", back_populates="user", uselist=False, cascade="all, delete-orphan")
