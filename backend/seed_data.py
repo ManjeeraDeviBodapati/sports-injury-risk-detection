@@ -11,6 +11,7 @@ def seed_database():
     try:
         # 1. Seed System Users (All 5 Roles)
         users_data = [
+            ("Springboard Mentor", "springboardmentor2126y@gmail.com", "mentor123", "Administrator"),
             ("Admin User", "admin@sportsinjury.org", "admin123", "Administrator"),
             ("Head Coach John", "coach@sportsinjury.org", "coach123", "Coach"),
             ("Dr. Sarah (Physio)", "physio@sportsinjury.org", "physio123", "Physiotherapist"),
