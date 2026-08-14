@@ -13,6 +13,7 @@ from app.routes.datasets import router as datasets_router
 from app.routes.pose import router as pose_router
 from app.routes.biomechanics import router as biomechanics_router
 from app.routes.reports import router as reports_router
+from app.routes.risk import router as risk_router
 
 # Create database tables automatically
 Base.metadata.create_all(bind=engine)
@@ -21,7 +22,7 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
-    description="AI-Powered Sports Injury Risk Detection Platform API (Milestone 1 & 2 Core Engine)"
+    description="AI-Powered Sports Injury Risk Detection Platform API (Milestones 1, 2 & 3 Core Engine)"
 )
 
 # Configure CORS Middleware
@@ -40,6 +41,7 @@ app.include_router(datasets_router)
 app.include_router(pose_router)
 app.include_router(biomechanics_router)
 app.include_router(reports_router)
+app.include_router(risk_router)
 
 @app.get("/")
 def home():
@@ -47,6 +49,6 @@ def home():
         "status": "online",
         "system": settings.PROJECT_NAME,
         "version": settings.VERSION,
-        "milestones": ["Milestone 1 Completed", "Milestone 2 Operational"],
+        "milestones": ["Milestone 1 Completed", "Milestone 2 Operational", "Milestone 3 Functional"],
         "documentation": "/docs"
     }

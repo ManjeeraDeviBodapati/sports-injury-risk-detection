@@ -8,10 +8,12 @@ import DatasetsExplorer from './components/DatasetsExplorer';
 import ArchitectureViewer from './components/ArchitectureViewer';
 import PoseEstimationStudio from './components/PoseEstimationStudio';
 import BiomechanicsReportView from './components/BiomechanicsReportView';
+import AthleteIntelligenceDashboard from './components/AthleteIntelligenceDashboard';
+import TeamRiskOverview from './components/TeamRiskOverview';
 import './App.css';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('athletes'); // 'athletes', 'pose_studio', 'role_dashboard', 'datasets', 'architecture'
+  const [activeTab, setActiveTab] = useState('intelligence'); // 'intelligence', 'team_heatmap', 'athletes', 'pose_studio', 'role_dashboard', 'datasets', 'architecture'
   const [currentRole, setCurrentRole] = useState('Administrator');
   const [user, setUser] = useState(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -64,6 +66,20 @@ export default function App() {
       />
 
       <main className="main-content">
+        {activeTab === 'intelligence' && (
+          <AthleteIntelligenceDashboard onShowToast={showToast} />
+        )}
+
+        {activeTab === 'team_heatmap' && (
+          <TeamRiskOverview
+            onShowToast={showToast}
+            onSelectAthlete={(ath) => {
+              setSelectedAthlete(ath);
+              setActiveTab('athletes');
+            }}
+          />
+        )}
+
         {activeTab === 'athletes' && (
           <AthleteManagement
             onSelectAthlete={(ath) => setSelectedAthlete(ath)}

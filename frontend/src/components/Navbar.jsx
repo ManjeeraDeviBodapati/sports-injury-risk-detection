@@ -24,7 +24,7 @@ export default function Navbar({
         <div>
           <h1 className="brand-title">Sports Injury Intelligence</h1>
           <span style={{ fontSize: '0.7rem', color: 'var(--primary)', letterSpacing: '0.05em' }}>
-            AI BIOMECHANICS & POSE ESTIMATION (MILESTONES 1 & 2)
+            AI BIOMECHANICS & PREDICTIVE ANALYTICS (MILESTONES 1, 2 & 3)
           </span>
         </div>
       </div>
@@ -35,6 +35,18 @@ export default function Navbar({
           onClick={() => setActiveTab('athletes')}
         >
           Athletes
+        </button>
+        <button
+          className={`nav-tab ${activeTab === 'intelligence' ? 'active' : ''}`}
+          onClick={() => setActiveTab('intelligence')}
+        >
+          Risk Intelligence
+        </button>
+        <button
+          className={`nav-tab ${activeTab === 'team_heatmap' ? 'active' : ''}`}
+          onClick={() => setActiveTab('team_heatmap')}
+        >
+          Team Heatmap
         </button>
         <button
           className={`nav-tab ${activeTab === 'pose_studio' ? 'active' : ''}`}
@@ -52,13 +64,13 @@ export default function Navbar({
           className={`nav-tab ${activeTab === 'datasets' ? 'active' : ''}`}
           onClick={() => setActiveTab('datasets')}
         >
-          Biomechanics Datasets
+          Datasets
         </button>
         <button
           className={`nav-tab ${activeTab === 'architecture' ? 'active' : ''}`}
           onClick={() => setActiveTab('architecture')}
         >
-          System Architecture
+          Architecture
         </button>
       </nav>
 
